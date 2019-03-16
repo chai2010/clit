@@ -7,19 +7,17 @@ package clit
 import (
 	"strconv"
 	"strings"
-	"unicode/utf8"
+	"unicode"
 )
 
 func String(s string) string {
 	var sb strings.Builder
-	for _, c := range s {
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+
 		if c > 127 {
-			buf := make([]byte, 5)
-			n := utf8.EncodeRune(buf, c)
-			for i := 0; i < n; i++ {
-				sb.WriteString(`\x`)
-				sb.WriteString(strconv.FormatInt(int64(buf[i]), 16))
-			}
+			sb.WriteString(`\x`)
+			sb.WriteString(strconv.FormatInt(int64(c), 16))
 			continue
 		}
 
@@ -51,7 +49,15 @@ func String(s string) string {
 			sb.WriteString(`\"`)
 
 		default:
-			sb.WriteRune(c)
+			switch {
+			case unicode.IsGraphic(rune(c)):
+				sb.WriteByte(c)
+			case unicode.IsSpace(rune(c)):
+				sb.WriteByte(c)
+			default:
+				sb.WriteString(`\x`)
+				sb.WriteString(strconv.FormatInt(int64(c), 16))
+			}
 		}
 	}
 
