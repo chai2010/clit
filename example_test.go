@@ -1,11 +1,8 @@
-# C字面值
+// Copyright 2019 <chaishushan{AT}gmail.com>. All rights reserved.
+// Use of this source code is governed by a BSD-style
+// license that can be found in the LICENSE file.
 
-C子面值辅助函数.
-
-## 生成C标识符
-
-```go
-package main
+package clit_test
 
 import (
 	"fmt"
@@ -13,7 +10,7 @@ import (
 	"github.com/chai2010/clit"
 )
 
-func main() {
+func Example() {
 	fmt.Println(clit.Ident("main", "main"))
 	fmt.Println(clit.Ident("path/to/pkg", "main", "count"))
 	fmt.Println(clit.Ident("github.com/chai2010/pbgo", "HttpRule"))
@@ -25,4 +22,3 @@ func main() {
 	// $github_com_chai2010_pbgo_$HttpRule
 	// $主包_$主函数
 }
-```
