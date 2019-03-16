@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+// +build go1.10
+
 package clit
 
 import (
@@ -10,26 +12,28 @@ import (
 )
 
 func Ident(pkg string, scopeId ...string) string {
-	var newPkgPath = "$"
-	for _, c := range ([]rune)(pkg) {
+	var sb strings.Builder
+
+	sb.WriteRune('$')
+	for _, c := range pkg {
 		if unicode.IsLetter(c) || unicode.IsNumber(c) {
-			newPkgPath += string(c)
+			sb.WriteRune(c)
 		} else {
-			newPkgPath += "_"
+			sb.WriteRune('_')
 		}
 	}
 
-	var newIdPath []string
-	for i, id := range scopeId {
-		newIdPath = append(newIdPath, "$")
-		for _, c := range ([]rune)(id) {
+	for _, id := range scopeId {
+		sb.WriteRune('_')
+		sb.WriteRune('$')
+		for _, c := range id {
 			if unicode.IsLetter(c) || unicode.IsNumber(c) {
-				newIdPath[i] += string(c)
+				sb.WriteRune(c)
 			} else {
-				newIdPath[i] += "_"
+				sb.WriteRune('_')
 			}
 		}
 	}
 
-	return newPkgPath + "_" + strings.Join(newIdPath, "_")
+	return sb.String()
 }
