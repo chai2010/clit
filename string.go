@@ -50,9 +50,7 @@ func String(s string) string {
 
 		default:
 			switch {
-			case unicode.IsGraphic(rune(c)):
-				sb.WriteByte(c)
-			case unicode.IsSpace(rune(c)):
+			case unicode.IsPrint(rune(c)):
 				sb.WriteByte(c)
 			default:
 				sb.WriteString(`\x`)
